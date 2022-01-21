@@ -122,7 +122,13 @@ var script = Vue.extend({
   },
 
   data() {
-    const selected = this.value?.value ? this.options.findIndex(option => option.value === this.value?.value) : 0;
+    var _this$value, _this$options;
+
+    const selected = (_this$value = this.value) !== null && _this$value !== void 0 && _this$value.value ? this.options.findIndex(option => {
+      var _this$value2;
+
+      return option.value === ((_this$value2 = this.value) === null || _this$value2 === void 0 ? void 0 : _this$value2.value);
+    }) : 0;
     const selectedIndex = selected > -1 ? selected : 0;
     const options = getVisibleOptions(this.options, selectedIndex); // const circular = initCircularBuffer(this.options, selectedIndex);
 
@@ -137,7 +143,7 @@ var script = Vue.extend({
       // Options {value: xx, text: xx}
       visibleOptions: options.options,
       visibleOptionsIndex: options.start,
-      selected: this.value || this.options?.[0] || null,
+      selected: this.value || ((_this$options = this.options) === null || _this$options === void 0 ? void 0 : _this$options[0]) || null,
       selectedIndex,
       prevSelectedIndex: selectedIndex,
       maxAcceleration: 10,
@@ -172,8 +178,14 @@ var script = Vue.extend({
 
   watch: {
     value(val) {
-      if (val?.value === this.selected?.value) return;
-      const newIndex = val?.value ? this.source.findIndex(option => option.value === this.value?.value) : 0;
+      var _this$selected;
+
+      if ((val === null || val === void 0 ? void 0 : val.value) === ((_this$selected = this.selected) === null || _this$selected === void 0 ? void 0 : _this$selected.value)) return;
+      const newIndex = val !== null && val !== void 0 && val.value ? this.source.findIndex(option => {
+        var _this$value3;
+
+        return option.value === ((_this$value3 = this.value) === null || _this$value3 === void 0 ? void 0 : _this$value3.value);
+      }) : 0;
       this.selected = val;
       if (this.selectedIndex !== newIndex) this.selectedIndex = newIndex;
       this.animateToScroll(this.selectedIndex, newIndex);
@@ -309,13 +321,17 @@ var script = Vue.extend({
 
       if (this.type === 'normal') {
         if (this.selectedIndex < 0 || this.selectedIndex > this.source.length - 1) {
+          var _this$animateToScroll;
+
           a = this.maxAcceleration;
           initScroll = this.selectedIndex;
           finalScroll = this.selectedIndex < 0 ? 0 : this.source.length - 1;
           totalScrollLen = initScroll - finalScroll;
           t = Math.sqrt(Math.abs(totalScrollLen / a));
-          this.animateToScroll(initScroll, finalScroll, t)?.then(() => this.selectByScroll(this.selectedIndex));
+          (_this$animateToScroll = this.animateToScroll(initScroll, finalScroll, t)) === null || _this$animateToScroll === void 0 ? void 0 : _this$animateToScroll.then(() => this.selectByScroll(this.selectedIndex));
         } else {
+          var _this$animateToScroll2;
+
           initScroll = this.selectedIndex;
           a = initV > 0 ? -this.sensitivity : this.sensitivity; // Is acceleration or deceleration
 
@@ -328,9 +344,11 @@ var script = Vue.extend({
           finalScroll = finalScroll < 0 ? 0 : finalScroll > this.source.length - 1 ? this.source.length - 1 : finalScroll;
           totalScrollLen = finalScroll - initScroll;
           t = Math.sqrt(Math.abs(totalScrollLen / a));
-          this.animateToScroll(this.selectedIndex, finalScroll, t)?.then(() => this.selectByScroll(this.selectedIndex));
+          (_this$animateToScroll2 = this.animateToScroll(this.selectedIndex, finalScroll, t)) === null || _this$animateToScroll2 === void 0 ? void 0 : _this$animateToScroll2.then(() => this.selectByScroll(this.selectedIndex));
         }
       } else {
+        var _this$animateToScroll3;
+
         a = initV > 0 ? -this.sensitivity : this.sensitivity; // Deceleration/Acceleration
 
         t = Math.abs(initV / a); // Speed reduced to 0 takes time
@@ -339,7 +357,7 @@ var script = Vue.extend({
 
         finalScroll = Math.round(this.selectedIndex + totalScrollLen); // Round to ensure accuracy and finally scroll as an integer
 
-        this.animateToScroll(this.selectedIndex, finalScroll, t)?.then(() => this.selectByScroll(this.selectedIndex));
+        (_this$animateToScroll3 = this.animateToScroll(this.selectedIndex, finalScroll, t)) === null || _this$animateToScroll3 === void 0 ? void 0 : _this$animateToScroll3.then(() => this.selectByScroll(this.selectedIndex));
       }
     },
 
@@ -399,8 +417,10 @@ var script = Vue.extend({
     },
 
     doManualSelect(initScroll, finalScroll) {
+      var _this$animateToScroll4;
+
       let time = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-      this.animateToScroll(initScroll, finalScroll, time)?.then(() => this.selectByScroll(this.selectedIndex));
+      (_this$animateToScroll4 = this.animateToScroll(initScroll, finalScroll, time)) === null || _this$animateToScroll4 === void 0 ? void 0 : _this$animateToScroll4.then(() => this.selectByScroll(this.selectedIndex));
     }
 
   }
